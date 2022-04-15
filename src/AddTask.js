@@ -1,31 +1,44 @@
 import React from 'react'
 import Button from './Button'
-import { useState, useRef } from 'react';
+
+import { useState, useRef, useEffect } from 'react';
 
 const AddTask = () => {
-    const inputEl = useRef(null);
-    const onButtonClick = () => {
-    const [count, setCount] = useState(0);
-    if(localStorage.getItem("task")!=""){
-        const prevTasks=localStorage.getItem.JSON.parse();
-        let tasks=prevTasks.push(inputEl.current);
-        localStorage.setItem("task",JSON.stringify(tasks));
-    }else {
-        let tasks=inputEl.current
-        localStorage.setItem("task",JSON.stringify(tasks));
-    };
+    const inputEl = useRef();
+    const [tasks, setTasks] = useState([]);
+
+    useEffect(( )=>{      
+      const oldTasks=JSON.parse(localStorage.getItem("tasks"));
+      if(oldTasks){setTasks(oldTasks);  }
+      
+    },[]);
+
+    useEffect(( )=>{
+          
+      localStorage.setItem("tasks",JSON.stringify(tasks));      
+    },[tasks]);
 
     
-    inputEl.current.focus();
-  };
+    
+
+    const onButtonClick = () => {   
+      if(!inputEl.current.value)return
+        setTasks(prevTasks => {
+          return [...prevTasks,  {name:inputEl.current.value}]
+        })
+      
+    };
     
   return (
-    <form action="">
-        <label htmlFor="newTask"></label>
-        <input ref={inputEl} type="text" />
-        <Button color="green" onClick= {onButtonClick}/>
-    </form>
+    <div>
+      <label htmlFor="newTask"></label>
+      <input type="text" ref={inputEl} />
+      <Button color="green" text="add task" onClick= {onButtonClick}/> 
+      <ul>{tasks.map((task, index) => {
+        return <li key={index}>{task.name}</li>
+      })}</ul>
+    </div>
   )
-}
+};
 
-export default AddTask
+export default AddTask;

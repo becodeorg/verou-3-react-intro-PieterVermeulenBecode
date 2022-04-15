@@ -1,32 +1,52 @@
 import React from "react";
-import Tasks from "./Tasks";
+
 import PropTypes  from "prop-types";
 import Button from "./Button";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from "react-router-dom";
+
 
 const Home = (props) => {  //({title})==(props.title)
-    const onClick=()=>{
-        console.log('click')
-    }         
-    const [tasks,setTasks]=useState([
-        {
-            id:1,
-            text:"task1",
-            reminder:false
-        },{
-            id:2,
-            text:"task2",
-            reminder:false
-        }]);
+    const [tasks, setTasks] = useState([]);
+    
+    const remove=(name)=>{
+        setTasks(
+            tasks.filter(function(jsonObject) {
+                return jsonObject.name !== name;
+            })
+        );
+    }
+
+    const blue=()=>{
+        const oldTasks=JSON.parse(localStorage.getItem("tasks"));
+        setTasks(oldTasks); 
+        console.log(oldTasks);
+        //set background to blue
+        //change blue is cool to blue is not cool
+    }
+
+    useEffect(( )=>{      
+        const oldTasks=JSON.parse(localStorage.getItem("tasks"));
+        if(oldTasks){setTasks(oldTasks);  }
+        
+      },[]);
+
+    useEffect(( )=>{
+        // if(tasks!==""){
+        //     localStorage.setItem("tasks",JSON.stringify(tasks));      
+        // }
+    },[tasks]);
+    
     return (
-        <>
-           
-            <h1>{props.title}</h1>
-            <Tasks tasks={tasks}/>
-            <Button onClick={onClick} color="green" text="add"/>
-            <Button onClick={onClick} color="red" text="remove"/>
-            <Button onClick={onClick} color="blue" text="blue is cool"/>
-            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur, quas reiciendis aliquid doloremque cumque porro officiis quaerat quasi! Quasi provident atque dolore quae eligendi dolores aspernatur alias eos consequuntur quaerat. Ad corrupti dolore, voluptatem, nobis non amet quo voluptas ipsa, voluptatibus nam libero magnam! Atque non asperiores iste expedita molestiae, neque nisi illum eius soluta similique hic fugiat autem consequatur exercitationem numquam omnis eos dicta molestias harum, animi assumenda ab perspiciatis. Autem possimus delectus eligendi voluptatibus commodi nulla sequi, iste repellat at! Laboriosam assumenda, quaerat corrupti nam, aliquid ratione quidem perspiciatis sint inventore, qui ut sit necessitatibus vitae distinctio voluptatibus!</div>
+        <>           
+            <h1>Task manager</h1>
+            
+            <Link to="/AddTask"><Button color="green" text="add"/></Link> 
+            
+            <Button onClick={blue} color="blue" text="blue is cool"/>
+            <ul>{tasks.map((task, index) => {
+                return <li key={index}>{task.name} <Button onClick={remove(task.name)} color="red" text="remove"/></li>
+            })}</ul>
         </>
     )
 }

@@ -1,13 +1,9 @@
 
 //rafce
 const Navigation=()=>{
-    return [
-        <>
-            
-                <a  href="/">Home</a>
-            
-        </>
-    ];
+    return (
+        <a href="/">Home</a>
+    );
 };
 
 
