@@ -9,18 +9,16 @@ import { Link } from "react-router-dom";
 const Home = (props) => {  //({title})==(props.title)
     const [tasks, setTasks] = useState([]);
     
-    const remove=(name)=>{
-        setTasks(
-            tasks.filter(function(jsonObject) {
-                return jsonObject.name !== name;
-            })
-        );
+    const remove=(deletedIndex)=>{
+        console.log(deletedIndex)
+        setTasks(tasks.splice(deletedIndex,1));
+        localStorage.setItem("tasks",JSON.stringify(tasks));
     }
 
     const blue=()=>{
         const oldTasks=JSON.parse(localStorage.getItem("tasks"));
         setTasks(oldTasks); 
-        console.log(oldTasks);
+        
         //set background to blue
         //change blue is cool to blue is not cool
     }
@@ -45,7 +43,7 @@ const Home = (props) => {  //({title})==(props.title)
             
             <Button onClick={blue} color="blue" text="blue is cool"/>
             <ul>{tasks.map((task, index) => {
-                return <li key={index}>{task.name} <Button onClick={remove(task.name)} color="red" text="remove"/></li>
+                return <li key={index}>{task.name} <Button onClick={()=>{remove(index)}} color="red" text="remove"/></li>
             })}</ul>
         </>
     )

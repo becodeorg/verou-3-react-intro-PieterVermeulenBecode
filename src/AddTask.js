@@ -16,16 +16,14 @@ const AddTask = () => {
     useEffect(( )=>{
           
       localStorage.setItem("tasks",JSON.stringify(tasks));      
-    },[tasks]);
-
-    
-    
+    },[tasks]);   
 
     const onButtonClick = () => {   
       if(!inputEl.current.value)return
         setTasks(prevTasks => {
           return [...prevTasks,  {name:inputEl.current.value}]
         })
+        
       
     };
     
