@@ -1,19 +1,40 @@
 import React from "react";
 
-import PropTypes  from "prop-types";
+
 import Button from "./Button";
 import { useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 
+let firstRender=true;
 
 const Home = (props) => {  //({title})==(props.title)
     const [tasks, setTasks] = useState([]);
     
-    const remove=(deletedIndex)=>{
-        console.log(deletedIndex)
-        setTasks(tasks.splice(deletedIndex,1));
-        localStorage.setItem("tasks",JSON.stringify(tasks));
-    }
+    const remove=(id)=>{  
+        
+        setTasks(tasks.filter(item => item.id !== id));
+        
+    };
+
+    useEffect(( )=>{      
+        const oldTasks=JSON.parse(localStorage.getItem("tasks"));
+        if(oldTasks){setTasks(oldTasks);  }
+        
+      },[]);
+
+    useEffect(( )=>{
+        
+        if(!firstRender){
+            console.log("tasks are updated to:"+tasks);
+            localStorage.setItem("tasks",JSON.stringify(tasks));             
+        } 
+        firstRender = false;
+       
+        
+
+    },[tasks]); 
+
+    
 
     const blue=()=>{
         const oldTasks=JSON.parse(localStorage.getItem("tasks"));
@@ -23,17 +44,11 @@ const Home = (props) => {  //({title})==(props.title)
         //change blue is cool to blue is not cool
     }
 
-    useEffect(( )=>{      
-        const oldTasks=JSON.parse(localStorage.getItem("tasks"));
-        if(oldTasks){setTasks(oldTasks);  }
-        
-      },[]);
-
-    useEffect(( )=>{
-        // if(tasks!==""){
-        //     localStorage.setItem("tasks",JSON.stringify(tasks));      
-        // }
-    },[tasks]);
+    const render = () =>{
+        return (<ul>{tasks.map((task, index) => {
+            return <li data-value={index} key={index}>{task.name} <Button onClick={()=>{remove(task.id)}} color="red" text="remove"/></li>
+        })}</ul>)
+    }
     
     return (
         <>           
@@ -42,17 +57,10 @@ const Home = (props) => {  //({title})==(props.title)
             <Link to="/AddTask"><Button color="green" text="add"/></Link> 
             
             <Button onClick={blue} color="blue" text="blue is cool"/>
-            <ul>{tasks.map((task, index) => {
-                return <li key={index}>{task.name} <Button onClick={()=>{remove(index)}} color="red" text="remove"/></li>
-            })}</ul>
+            {render()}
         </>
     )
 }
-Home.defaultProps={
-    title:"Task Tracker"
-}
-Home.propTypes = {
-    title: PropTypes.string.isRequired,
-}
+
 
 export default Home;

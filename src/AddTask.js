@@ -1,6 +1,6 @@
 import React from 'react'
 import Button from './Button'
-
+import uniqueId from 'lodash/utility/uniqueId'
 import { useState, useRef, useEffect } from 'react';
 
 const AddTask = () => {
@@ -21,7 +21,7 @@ const AddTask = () => {
     const onButtonClick = () => {   
       if(!inputEl.current.value)return
         setTasks(prevTasks => {
-          return [...prevTasks,  {name:inputEl.current.value}]
+          return [...prevTasks,  {id:uniqueId() ,name:inputEl.current.value}]
         })
         
       
