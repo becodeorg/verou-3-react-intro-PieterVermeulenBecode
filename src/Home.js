@@ -63,7 +63,8 @@ const Home = (props) => {  //({title})==(props.title)
             
             <Link to="/AddTask"><Button color="green" text="add"/></Link> 
             
-            <Button onClick={changeBackgroundColor} color="blue" text={nextcolor}/>
+            <Button onClick={changeBackgroundColor} color={nextcolor} text="new background!"/>
+            <h3>Your tasks:</h3>
             <ul>{tasks.map((task, index) => {
                 return <li data-value={index} key={index}>{task.name} <Button onClick={()=>{remove(task.id)}} color="red" text="remove"/></li>
             })}</ul>

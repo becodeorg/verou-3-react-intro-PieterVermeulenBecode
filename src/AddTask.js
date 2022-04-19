@@ -27,17 +27,25 @@ const AddTask = () => {
        
       
     };
-    
+    const handleKeyPress = (event) => {
+      if(event.key === 'Enter'){
+        onButtonClick();
+      }
+    }
   return (
     <div>
       <label htmlFor="newTask"></label>
-      <input type="text" ref={inputEl} />
+      <input type="text" ref={inputEl} onKeyUp={handleKeyPress}/>
       <Button color="green" text="add task" onClick= {onButtonClick}/> 
+      <h3>Your tasks:</h3>
       <ul>{tasks.map((task, index) => {
         return <li key={index}>{task.name}</li>
       })}</ul>
     </div>
+    
   )
 };
+
+  
 
 export default AddTask;
