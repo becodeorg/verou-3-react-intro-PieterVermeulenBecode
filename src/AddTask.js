@@ -15,7 +15,8 @@ const AddTask = () => {
 
     useEffect(( )=>{
           
-      localStorage.setItem("tasks",JSON.stringify(tasks));      
+      localStorage.setItem("tasks",JSON.stringify(tasks)); 
+      inputEl.current.value = null     
     },[tasks]);   
 
     const onButtonClick = () => {   
@@ -23,7 +24,7 @@ const AddTask = () => {
         setTasks(prevTasks => {
           return [...prevTasks,  {id:uniqueId() ,name:inputEl.current.value}]
         })
-        
+       
       
     };
     

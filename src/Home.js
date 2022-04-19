@@ -9,6 +9,8 @@ let firstRender=true;
 
 const Home = (props) => {  //({title})==(props.title)
     const [tasks, setTasks] = useState([]);
+    const [bgcolor,setbgcolor]=useState("yellow");
+    const [nextcolor,setnextcolor]=useState("blue");
     
     const remove=(id)=>{  
         
@@ -34,20 +36,25 @@ const Home = (props) => {  //({title})==(props.title)
 
     },[tasks]); 
 
+    useEffect(()=>{
+        document.body.style = 'background: '+bgcolor+';';
+        setnextcolor(randomColor())
+    },[bgcolor])
+
+    const randomColor=()=>{
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+              color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+    }
     
 
-    const blue=()=>{
-        const oldTasks=JSON.parse(localStorage.getItem("tasks"));
-        setTasks(oldTasks); 
-        
-        //set background to blue
-        //change blue is cool to blue is not cool
-    }
+    
 
-    const render = () =>{
-        return (<ul>{tasks.map((task, index) => {
-            return <li data-value={index} key={index}>{task.name} <Button onClick={()=>{remove(task.id)}} color="red" text="remove"/></li>
-        })}</ul>)
+    const changeBackgroundColor=()=>{
+        setbgcolor(nextcolor);
     }
     
     return (
@@ -56,8 +63,10 @@ const Home = (props) => {  //({title})==(props.title)
             
             <Link to="/AddTask"><Button color="green" text="add"/></Link> 
             
-            <Button onClick={blue} color="blue" text="blue is cool"/>
-            {render()}
+            <Button onClick={changeBackgroundColor} color="blue" text={nextcolor}/>
+            <ul>{tasks.map((task, index) => {
+                return <li data-value={index} key={index}>{task.name} <Button onClick={()=>{remove(task.id)}} color="red" text="remove"/></li>
+            })}</ul>
         </>
     )
 }
